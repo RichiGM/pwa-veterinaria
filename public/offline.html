@@ -5,18 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sin conexión · HuellitasVet</title>
   <style>
-    body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,sans-serif;background:#f4fbfa;color:#0f2a33;text-align:center;padding:24px;box-sizing:border-box}
-    .card{background:#fff;padding:40px 32px;border-radius:24px;box-shadow:0 20px 50px rgba(15,42,51,.1);max-width:380px}
-    h1{font-size:1.6rem;margin:16px 0 8px}
-    p{color:#5b7078;line-height:1.5}
-    button{margin-top:16px;background:#0f9d8a;color:#fff;border:0;padding:12px 24px;border-radius:999px;font-weight:700;cursor:pointer}
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;background:#f7f7f7;color:#333;text-align:center;padding:24px;box-sizing:border-box}
+    .card{background:#fff;padding:30px;border:1px solid #ccc;border-radius:4px;max-width:380px}
+    h1{font-size:1.5rem;margin:12px 0 8px}
+    button{margin-top:12px;background:#2e7d6b;color:#fff;border:0;padding:10px 20px;border-radius:4px;cursor:pointer;font-size:1rem}
   </style>
 </head>
 <body>
   <div class="card">
-    <img src="/icons/icon.svg" width="72" height="72" alt="HuellitasVet" />
-    <h1>Estás sin conexión</h1>
-    <p>No pudimos cargar esta página. Revisa tu conexión a internet e inténtalo de nuevo. 🐾</p>
+    <img src="/icons/icon.svg" width="64" height="64" alt="HuellitasVet" />
+    <h1>No hay conexión</h1>
+    <p>No se pudo cargar la página. Revisa tu internet e intenta otra vez.</p>
     <button onclick="location.reload()">Reintentar</button>
   </div>
 </body>

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { Lock, Mail, User, UserPlus } from 'lucide-react'
 import toast from 'react-hot-toast'
 import DisenoAuth from '../componentes/DisenoAuth'
 import { useAuth } from '../contexto/ContextoAuth'
@@ -23,7 +22,7 @@ export default function Registro() {
     setEnviando(true)
     try {
       await registro(formulario.nombre.trim(), formulario.correo, formulario.contrasena)
-      toast.success(`¡Bienvenido, ${formulario.nombre}! 🐾`)
+      toast.success(`Bienvenido, ${formulario.nombre}`)
       navegar('/app')
     } catch (error) {
       toast.error(error.message)
@@ -32,41 +31,27 @@ export default function Registro() {
   }
 
   return (
-    <DisenoAuth titulo="Crear cuenta" subtitulo="Regístrate para agendar citas y llevar el control de tus mascotas." imagen="/img/registro.jpg">
+    <DisenoAuth titulo="Crear cuenta" subtitulo="Regístrate para agendar citas y guardar tus mascotas." imagen="/img/registro.jpg">
       <form className="form" onSubmit={alEnviar}>
         <label className="field">
-          <span>Nombre completo</span>
-          <div className="input-icon">
-            <User size={18} />
-            <input name="nombre" placeholder="Ej. Ana Martínez" value={formulario.nombre} onChange={alCambiar} required autoComplete="name" />
-          </div>
+          <span>Nombre</span>
+          <input name="nombre" placeholder="Ej. Ana Martínez" value={formulario.nombre} onChange={alCambiar} required autoComplete="name" />
         </label>
         <label className="field">
-          <span>Correo electrónico</span>
-          <div className="input-icon">
-            <Mail size={18} />
-            <input type="email" name="correo" placeholder="tu@correo.com" value={formulario.correo} onChange={alCambiar} required autoComplete="email" />
-          </div>
+          <span>Correo</span>
+          <input type="email" name="correo" placeholder="tu@correo.com" value={formulario.correo} onChange={alCambiar} required autoComplete="email" />
         </label>
-        <div className="form__row">
-          <label className="field">
-            <span>Contraseña</span>
-            <div className="input-icon">
-              <Lock size={18} />
-              <input type="password" name="contrasena" placeholder="Mín. 6 caracteres" value={formulario.contrasena} onChange={alCambiar} required autoComplete="new-password" />
-            </div>
-          </label>
-          <label className="field">
-            <span>Confirmar</span>
-            <div className="input-icon">
-              <Lock size={18} />
-              <input type="password" name="confirmacion" placeholder="Repite la contraseña" value={formulario.confirmacion} onChange={alCambiar} required autoComplete="new-password" />
-            </div>
-          </label>
-        </div>
+        <label className="field">
+          <span>Contraseña (mínimo 6 caracteres)</span>
+          <input type="password" name="contrasena" value={formulario.contrasena} onChange={alCambiar} required autoComplete="new-password" />
+        </label>
+        <label className="field">
+          <span>Repite la contraseña</span>
+          <input type="password" name="confirmacion" value={formulario.confirmacion} onChange={alCambiar} required autoComplete="new-password" />
+        </label>
 
-        <button className="btn btn--primary btn--block btn--lg" disabled={enviando}>
-          <UserPlus size={18} /> {enviando ? 'Creando cuenta...' : 'Crear cuenta'}
+        <button className="btn btn--primary btn--block" disabled={enviando}>
+          {enviando ? 'Creando cuenta...' : 'Crear cuenta'}
         </button>
       </form>
 

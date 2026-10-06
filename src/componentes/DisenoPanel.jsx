@@ -1,13 +1,12 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { CalendarDays, LogOut, PawPrint, Stethoscope } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuth } from '../contexto/ContextoAuth'
 import Logo from './Logo'
 
 const enlaces = [
-  { ruta: '/app/mascotas', texto: 'Mis mascotas', icono: PawPrint },
-  { ruta: '/app/citas', texto: 'Mis citas', icono: CalendarDays },
-  { ruta: '/app/servicios', texto: 'Servicios', icono: Stethoscope },
+  { ruta: '/app/mascotas', texto: 'Mis mascotas', corto: 'Mascotas' },
+  { ruta: '/app/citas', texto: 'Mis citas', corto: 'Citas' },
+  { ruta: '/app/servicios', texto: 'Servicios', corto: 'Servicios' },
 ]
 
 export default function DisenoPanel() {
@@ -16,7 +15,7 @@ export default function DisenoPanel() {
 
   const cerrarSesion = async () => {
     await logout()
-    toast.success('Sesión cerrada. ¡Vuelve pronto! 🐾')
+    toast.success('Sesión cerrada')
     navegar('/login', { replace: true })
   }
 
@@ -26,31 +25,25 @@ export default function DisenoPanel() {
         <Logo destino="/app" claro />
 
         <nav className="sidebar__nav">
-          {enlaces.map(({ ruta, texto, icono: Icono }) => (
+          {enlaces.map(({ ruta, texto }) => (
             <NavLink key={ruta} to={ruta} className="sidebar__link">
-              <Icono size={20} />
-              <span>{texto}</span>
+              {texto}
             </NavLink>
           ))}
         </nav>
 
         <div className="sidebar__user">
-          <div className="avatar">{nombre.charAt(0).toUpperCase()}</div>
-          <div className="sidebar__user-info">
-            <strong>{nombre}</strong>
-            <small>{usuario?.correo}</small>
-          </div>
+          <strong>{nombre}</strong>
+          {usuario?.correo}
         </div>
-        <button className="btn btn--ghost-light btn--block" onClick={cerrarSesion}>
-          <LogOut size={18} /> Cerrar sesión
+        <button className="btn btn--salir btn--block" onClick={cerrarSesion}>
+          Cerrar sesión
         </button>
       </aside>
 
       <header className="topbar">
         <Logo destino="/app" />
-        <button className="icon-btn" onClick={cerrarSesion} aria-label="Cerrar sesión" title="Cerrar sesión">
-          <LogOut size={20} />
-        </button>
+        <button className="btn btn--sm" onClick={cerrarSesion}>Salir</button>
       </header>
 
       <main className="dash__main">
@@ -58,10 +51,9 @@ export default function DisenoPanel() {
       </main>
 
       <nav className="bottom-nav">
-        {enlaces.map(({ ruta, texto, icono: Icono }) => (
+        {enlaces.map(({ ruta, corto }) => (
           <NavLink key={ruta} to={ruta} className="bottom-nav__link">
-            <Icono size={22} />
-            <span>{texto.replace('Mis ', '')}</span>
+            {corto}
           </NavLink>
         ))}
       </nav>

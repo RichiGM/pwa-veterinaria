@@ -1,4 +1,4 @@
-const VERSION = 'v2'
+const VERSION = 'v3'
 const CACHE_ESTATICA = `huellitas-estatica-${VERSION}`
 const CACHE_DINAMICA = `huellitas-dinamica-${VERSION}`
 

@@ -1,24 +1,15 @@
 import { useState } from 'react'
-import { PawPrint } from 'lucide-react'
 
-export default function ImagenSegura({ ruta, texto, clase = '', icono: Icono = PawPrint }) {
+export default function ImagenSegura({ ruta, texto, clase = '' }) {
   const [fallo, setFallo] = useState(!ruta)
 
   if (fallo) {
     return (
-      <div className={`smart-img smart-img--fallback ${clase}`} role="img" aria-label={texto}>
-        <Icono size={48} strokeWidth={1.5} />
+      <div className={`img-box img-box--vacia ${clase}`} role="img" aria-label={texto}>
+        {texto}
       </div>
     )
   }
 
-  return (
-    <img
-      src={ruta}
-      alt={texto}
-      loading="lazy"
-      className={`smart-img ${clase}`}
-      onError={() => setFallo(true)}
-    />
-  )
+  return <img src={ruta} alt={texto} loading="lazy" className={`img-box ${clase}`} onError={() => setFallo(true)} />
 }

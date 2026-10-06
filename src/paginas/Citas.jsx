@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { Ban, CalendarDays, CalendarPlus, Clock, Stethoscope, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '../api/cliente'
 import { ESPECIES, ESTADOS_CITA, formatoPrecio } from '../datos/especies'
@@ -83,7 +82,7 @@ export default function Citas() {
     setGuardando(true)
     try {
       await api('/citas', { metodo: 'POST', cuerpo: formulario })
-      toast.success('¡Cita agendada! 📅')
+      toast.success('Cita agendada')
       setModalAbierto(false)
       setFormulario(formularioInicial())
       cargarDatos()
@@ -119,11 +118,11 @@ export default function Citas() {
     <>
       <div className="page-head">
         <div>
-          <p className="muted">Organiza las visitas de tus mascotas</p>
+          <p className="muted">Citas de tus mascotas</p>
           <h1>Mis citas</h1>
         </div>
         <button className="btn btn--primary" onClick={() => setModalAbierto(true)} disabled={!mascotas.length && !cargando}>
-          <CalendarPlus size={18} /> Nueva cita
+          Nueva cita
         </button>
       </div>
 
@@ -138,40 +137,34 @@ export default function Citas() {
       {cargando ? (
         <Cargador />
       ) : mascotas.length === 0 ? (
-        <EstadoVacio icono={CalendarDays} titulo="Primero registra una mascota" texto="Para agendar una cita necesitas tener al menos una mascota.">
+        <EstadoVacio titulo="Primero agrega una mascota" texto="Para agendar una cita necesitas tener una mascota.">
           <Link to="/app/mascotas" className="btn btn--primary">Ir a mis mascotas</Link>
         </EstadoVacio>
       ) : citasFiltradas.length === 0 ? (
-        <EstadoVacio icono={CalendarDays} titulo="No hay citas aquí" texto="Cuando agendes una cita aparecerá en esta sección.">
-          <button className="btn btn--primary" onClick={() => setModalAbierto(true)}><CalendarPlus size={18} /> Agendar cita</button>
+        <EstadoVacio titulo="No hay citas" texto="Aquí van a aparecer tus citas.">
+          <button className="btn btn--primary" onClick={() => setModalAbierto(true)}>Agendar cita</button>
         </EstadoVacio>
       ) : (
         <div className="list">
           {citasFiltradas.map((cita) => {
             const especie = ESPECIES[cita.mascota_especie] ?? ESPECIES.otro
-            const dia = new Date(cita.fecha + 'T00:00:00')
             return (
               <article key={cita.id} className={`appt ${cita.estado === 'cancelada' ? 'is-cancelled' : ''}`}>
-                <div className="appt__date">
-                  <strong>{dia.getDate()}</strong>
-                  <span>{dia.toLocaleDateString('es-MX', { month: 'short' })}</span>
-                </div>
-                <div className="appt__info">
-                  <h3><especie.icono size={18} /> {cita.mascota_nombre}</h3>
-                  <p className="muted">
-                    <Stethoscope size={14} /> {cita.servicio_nombre ?? 'Sin servicio'}
-                    {cita.servicio_nombre && <> · {formatoPrecio(cita.servicio_precio)}</>}
+                                <div className="appt__info">
+                  <h3>{cita.mascota_nombre} ({especie.etiqueta})</h3>
+                  <p>Servicio: {cita.servicio_nombre ?? 'Sin servicio'}
+                    {cita.servicio_nombre && <> - {formatoPrecio(cita.servicio_precio)}</>}
                   </p>
-                  <p className="muted"><Clock size={14} /> {formatoFecha(cita.fecha)} · {cita.hora.slice(0, 5)} h</p>
-                  {cita.motivo && <p className="appt__motivo">“{cita.motivo}”</p>}
+                  <p>Fecha: {formatoFecha(cita.fecha)} a las {cita.hora.slice(0, 5)} h</p>
+                  {cita.motivo && <p className="muted">Motivo: {cita.motivo}</p>}
                 </div>
                 <div className="appt__side">
                   <span className={`badge badge--${cita.estado}`}>{ESTADOS_CITA[cita.estado]}</span>
                   <div className="appt__actions">
                     {(cita.estado === 'pendiente' || cita.estado === 'confirmada') && (
-                      <button className="icon-btn" onClick={() => cancelar(cita)} title="Cancelar cita"><Ban size={18} /></button>
+                      <button className="btn btn--sm" onClick={() => cancelar(cita)}>Cancelar</button>
                     )}
-                    <button className="icon-btn icon-btn--danger" onClick={() => eliminar(cita)} title="Eliminar"><Trash2 size={18} /></button>
+                    <button className="btn btn--sm btn--danger" onClick={() => eliminar(cita)}>Eliminar</button>
                   </div>
                 </div>
               </article>
@@ -194,7 +187,7 @@ export default function Citas() {
             <select name="servicio_id" value={formulario.servicio_id} onChange={alCambiar}>
               <option value="">Selecciona un servicio</option>
               {servicios.map((servicio) => (
-                <option key={servicio.id} value={servicio.id}>{servicio.nombre} — {formatoPrecio(servicio.precio)}</option>
+                <option key={servicio.id} value={servicio.id}>{servicio.nombre} - {formatoPrecio(servicio.precio)}</option>
               ))}
             </select>
           </label>
@@ -209,8 +202,8 @@ export default function Citas() {
             </label>
           </div>
           <label className="field">
-            <span>Motivo de la consulta</span>
-            <textarea name="motivo" rows="3" value={formulario.motivo} onChange={alCambiar} placeholder="Describe brevemente los síntomas o el motivo" />
+            <span>Motivo</span>
+            <textarea name="motivo" rows="3" value={formulario.motivo} onChange={alCambiar} placeholder="Escribe el motivo de la consulta" />
           </label>
           <div className="modal__actions">
             <button type="button" className="btn btn--ghost" onClick={cerrarModal}>Cancelar</button>

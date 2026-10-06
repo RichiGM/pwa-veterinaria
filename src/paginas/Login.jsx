@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, Lock, LogIn, Mail } from 'lucide-react'
 import toast from 'react-hot-toast'
 import DisenoAuth from '../componentes/DisenoAuth'
 import { useAuth } from '../contexto/ContextoAuth'
@@ -22,7 +21,7 @@ export default function Login() {
     setEnviando(true)
     try {
       await login(formulario.correo, formulario.contrasena)
-      toast.success('¡Bienvenido de nuevo! 🐶')
+      toast.success('Bienvenido de nuevo')
       navegar(ubicacion.state?.desde || '/app', { replace: true })
     } catch (error) {
       toast.error(error.message)
@@ -31,34 +30,29 @@ export default function Login() {
   }
 
   return (
-    <DisenoAuth titulo="Iniciar sesión" subtitulo="Accede para ver a tus mascotas y tus citas." imagen="/img/login.jpg">
+    <DisenoAuth titulo="Iniciar sesión" subtitulo="Entra para ver tus mascotas y tus citas." imagen="/img/login.jpg">
       <form className="form" onSubmit={alEnviar}>
         <label className="field">
-          <span>Correo electrónico</span>
-          <div className="input-icon">
-            <Mail size={18} />
-            <input type="email" name="correo" placeholder="tu@correo.com" value={formulario.correo} onChange={alCambiar} required autoComplete="email" />
-          </div>
+          <span>Correo</span>
+          <input type="email" name="correo" placeholder="tu@correo.com" value={formulario.correo} onChange={alCambiar} required autoComplete="email" />
         </label>
 
         <label className="field">
           <span>Contraseña</span>
-          <div className="input-icon">
-            <Lock size={18} />
-            <input type={verContrasena ? 'text' : 'password'} name="contrasena" placeholder="••••••••" value={formulario.contrasena} onChange={alCambiar} required autoComplete="current-password" />
-            <button type="button" className="input-icon__btn" onClick={() => setVerContrasena(!verContrasena)} aria-label="Mostrar contraseña">
-              {verContrasena ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          </div>
+          <input type={verContrasena ? 'text' : 'password'} name="contrasena" value={formulario.contrasena} onChange={alCambiar} required autoComplete="current-password" />
         </label>
 
-        <button className="btn btn--primary btn--block btn--lg" disabled={enviando}>
-          <LogIn size={18} /> {enviando ? 'Entrando...' : 'Entrar'}
+        <label>
+          <input type="checkbox" checked={verContrasena} onChange={() => setVerContrasena(!verContrasena)} /> Mostrar contraseña
+        </label>
+
+        <button className="btn btn--primary btn--block" disabled={enviando}>
+          {enviando ? 'Entrando...' : 'Entrar'}
         </button>
       </form>
 
       <p className="auth__switch">
-        ¿No tienes cuenta? <Link to="/registro">Regístrate gratis</Link>
+        ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
       </p>
     </DisenoAuth>
   )

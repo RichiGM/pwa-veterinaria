@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { X } from 'lucide-react'
 
 export default function Modal({ abierto, titulo, onCerrar, children }) {
   useEffect(() => {
@@ -16,9 +15,7 @@ export default function Modal({ abierto, titulo, onCerrar, children }) {
       <div className="modal" role="dialog" aria-modal="true" onMouseDown={(evento) => evento.stopPropagation()}>
         <div className="modal__header">
           <h3>{titulo}</h3>
-          <button className="icon-btn" onClick={onCerrar} aria-label="Cerrar">
-            <X size={20} />
-          </button>
+          <button className="btn btn--sm" onClick={onCerrar} aria-label="Cerrar">Cerrar</button>
         </div>
         {children}
       </div>

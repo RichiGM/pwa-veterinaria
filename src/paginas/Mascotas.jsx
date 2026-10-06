@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CalendarPlus, Cake, PawPrint, Pencil, Plus, Scale, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '../api/cliente'
 import { useAuth } from '../contexto/ContextoAuth'
@@ -64,10 +63,10 @@ export default function Mascotas() {
     try {
       if (idEditando) {
         await api(`/mascotas/${idEditando}`, { metodo: 'PUT', cuerpo: formulario })
-        toast.success('Mascota actualizada ✏️')
+        toast.success('Mascota actualizada')
       } else {
         await api('/mascotas', { metodo: 'POST', cuerpo: formulario })
-        toast.success(`¡${formulario.nombre} se unió a la familia! 🐾`)
+        toast.success(`${formulario.nombre} fue agregado`)
       }
       setModalAbierto(false)
       cargarMascotas()
@@ -79,7 +78,7 @@ export default function Mascotas() {
   }
 
   const eliminar = async (mascota) => {
-    if (!confirm(`¿Eliminar a ${mascota.nombre}? También se borrarán sus citas.`)) return
+    if (!confirm(`¿Eliminar a ${mascota.nombre}? Sus citas también se borran.`)) return
     try {
       await api(`/mascotas/${mascota.id}`, { metodo: 'DELETE' })
       toast.success(`${mascota.nombre} fue eliminado`)
@@ -93,44 +92,39 @@ export default function Mascotas() {
     <>
       <div className="page-head">
         <div>
-          <p className="muted">Hola, {nombre} 👋</p>
+          <p className="muted">Hola, {nombre}</p>
           <h1>Mis mascotas</h1>
         </div>
         <button className="btn btn--primary" onClick={abrirNueva}>
-          <Plus size={18} /> Agregar mascota
+          Agregar mascota
         </button>
       </div>
 
       {cargando ? (
         <Cargador />
       ) : mascotas.length === 0 ? (
-        <EstadoVacio icono={PawPrint} titulo="Aún no tienes mascotas registradas" texto="Agrega a tu primer compañero para poder agendarle citas.">
-          <button className="btn btn--primary" onClick={abrirNueva}><Plus size={18} /> Agregar mascota</button>
+        <EstadoVacio titulo="Todavía no tienes mascotas" texto="Agrega una mascota para poder agendar citas.">
+          <button className="btn btn--primary" onClick={abrirNueva}>Agregar mascota</button>
         </EstadoVacio>
       ) : (
         <div className="grid grid--3">
           {mascotas.map((mascota) => {
             const especie = ESPECIES[mascota.especie] ?? ESPECIES.otro
             return (
-              <article key={mascota.id} className="pet-card">
+              <article key={mascota.id} className="card">
                 <div className="pet-card__media">
-                  <ImagenSegura ruta={especie.imagen} texto={especie.etiqueta} icono={especie.icono} clase="pet-card__img" />
-                  <span className="badge badge--light"><especie.icono size={14} /> {especie.etiqueta}</span>
+                  <ImagenSegura ruta={especie.imagen} texto={especie.etiqueta} />
                 </div>
-                <div className="pet-card__body">
+                <div className="card__body">
                   <h3>{mascota.nombre}</h3>
-                  <p className="muted">{mascota.raza || 'Raza no especificada'}</p>
-                  <div className="pet-card__meta">
-                    <span><Cake size={16} /> {mascota.edad != null ? `${mascota.edad} año${mascota.edad === 1 ? '' : 's'}` : '—'}</span>
-                    <span><Scale size={16} /> {mascota.peso != null ? `${mascota.peso} kg` : '—'}</span>
-                  </div>
+                  <p className="muted">{especie.etiqueta} - {mascota.raza || 'Sin raza'}</p>
+                  <p>Edad: {mascota.edad != null ? `${mascota.edad} año${mascota.edad === 1 ? '' : 's'}` : 'sin dato'}</p>
+                  <p>Peso: {mascota.peso != null ? `${mascota.peso} kg` : 'sin dato'}</p>
                   {mascota.notas && <p className="pet-card__notes">{mascota.notas}</p>}
                   <div className="pet-card__actions">
-                    <Link to={`/app/citas?mascota=${mascota.id}`} className="btn btn--soft btn--sm">
-                      <CalendarPlus size={16} /> Agendar
-                    </Link>
-                    <button className="icon-btn" onClick={() => abrirEdicion(mascota)} title="Editar"><Pencil size={18} /></button>
-                    <button className="icon-btn icon-btn--danger" onClick={() => eliminar(mascota)} title="Eliminar"><Trash2 size={18} /></button>
+                    <Link to={`/app/citas?mascota=${mascota.id}`} className="btn btn--sm">Agendar cita</Link>
+                    <button className="btn btn--sm" onClick={() => abrirEdicion(mascota)}>Editar</button>
+                    <button className="btn btn--sm btn--danger" onClick={() => eliminar(mascota)}>Eliminar</button>
                   </div>
                 </div>
               </article>
@@ -148,15 +142,15 @@ export default function Mascotas() {
 
           <div className="field">
             <span>Especie *</span>
-            <div className="chips">
-              {Object.entries(ESPECIES).map(([clave, { etiqueta, icono: Icono }]) => (
+            <div className="especies">
+              {Object.entries(ESPECIES).map(([clave, { etiqueta }]) => (
                 <button
                   type="button"
                   key={clave}
-                  className={`chip ${formulario.especie === clave ? 'is-active' : ''}`}
+                  className={`especie ${formulario.especie === clave ? 'is-active' : ''}`}
                   onClick={() => setFormulario({ ...formulario, especie: clave })}
                 >
-                  <Icono size={16} /> {etiqueta}
+                  {etiqueta}
                 </button>
               ))}
             </div>
@@ -179,7 +173,7 @@ export default function Mascotas() {
           </div>
 
           <label className="field">
-            <span>Notas (alergias, padecimientos...)</span>
+            <span>Notas (alergias, enfermedades, etc.)</span>
             <textarea name="notas" rows="3" value={formulario.notas} onChange={alCambiar} />
           </label>
 

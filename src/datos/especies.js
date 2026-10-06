@@ -1,11 +1,9 @@
-import { Bird, Cat, Dog, PawPrint, Rabbit } from 'lucide-react'
-
 export const ESPECIES = {
-  perro: { etiqueta: 'Perro', icono: Dog, imagen: '/img/mascota-perro.jpg' },
-  gato: { etiqueta: 'Gato', icono: Cat, imagen: '/img/mascota-gato.jpg' },
-  ave: { etiqueta: 'Ave', icono: Bird, imagen: '/img/mascota-ave.jpg' },
-  conejo: { etiqueta: 'Conejo', icono: Rabbit, imagen: '/img/mascota-conejo.jpg' },
-  otro: { etiqueta: 'Otro', icono: PawPrint, imagen: '/img/mascota-otro.jpg' },
+  perro: { etiqueta: 'Perro', imagen: '/img/mascota-perro.jpg' },
+  gato: { etiqueta: 'Gato', imagen: '/img/mascota-gato.jpg' },
+  ave: { etiqueta: 'Ave', imagen: '/img/mascota-ave.jpg' },
+  conejo: { etiqueta: 'Conejo', imagen: '/img/mascota-conejo.jpg' },
+  otro: { etiqueta: 'Otro', imagen: '/img/mascota-otro.jpg' },
 }
 
 export const ESTADOS_CITA = {

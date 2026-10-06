@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')).render(
         <App />
         <Toaster
           position="top-center"
-          toastOptions={{ style: { borderRadius: '14px', fontFamily: 'Nunito, sans-serif', fontWeight: 600 } }}
+          toastOptions={{ style: { borderRadius: '4px', fontFamily: 'Arial, sans-serif' } }}
         />
       </ProveedorAuth>
     </BrowserRouter>
